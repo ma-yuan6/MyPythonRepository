@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>算法记录表</title>
+    <!-- 新 Bootstrap5 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
+    <style>
+        h1 {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        table {
+            /*margin-top: 2rem;*/
+            padding-left: 2rem;
+        }
+
+        a {
+            color: #000000;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        tbody > tr > td {
+            cursor: pointer;
+        }
+
+        tbody > tr:hover > * {
+            background-color: skyblue;
+            transition: .1s;
+        }
+
+        .table {
+            padding: 2rem 4rem 2rem 2rem;
+        }
+
+        /*tbody > tr > td:nth-child(3) {*/
+        /*    color: skyblue;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<h1>算法记录表</h1>
+<div class="table">
+    <table class="table table-striped" style="padding-left: 2rem">
+        <thead>
+        <tr class="table-success">
+            <th scope="col">#</th>
+            <th scope="col">题目链接</th>
+            <th scope="col">时间</th>
+            <th scope="col">1</th>
+            <th scope="col">2</th>
+            <th scope="col">4</th>
+            <th scope="col">7</th>
+            <th scope="col">15</th>
+            <th scope="col">30</th>
+            <th scope="col">90</th>
+            <th scope="col">180</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for topic in all_topics %}
+            <tr>
+                <th scope="row">{{ topic[0] }}</th>
+                <td>
+                    <a href="{{ topic[2] }}" target="_blank">{{ topic[1] }}</a>
+                </td>
+                <td>{{ topic[3] }}</td>
+                <td>{{ '✅' if topic[4] else '❌' }}</td>
+                <td>{{ '✅' if topic[5] else '❌' }}</td>
+                <td>{{ '✅' if topic[6] else '❌' }}</td>
+                <td>{{ '✅' if topic[7] else '❌' }}</td>
+                <td>{{ '✅' if topic[8] else '❌' }}</td>
+                <td>{{ '✅' if topic[9] else '❌' }}</td>
+                <td>{{ '✅' if topic[10] else '❌' }}</td>
+                <td>{{ '✅' if topic[11] else '❌' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script>
+    $(document).ready(() => {
+        //给所有的td单元格绑定一个click事件
+        //如果这个table的id为table1，那单给table1的所有td加click事件代码为：
+        let tds = $("tbody>tr>td:nth-child(n + 4)");
+        tds.click(tdclick);
+    });
+
+    function send_change(id, time) {
+        console.log(id, time);
+        $.ajax({
+            type: "POST",
+            url: "/updata",
+            data: {
+                id: id,
+                time: time
+            },
+            success: function (data) {
+                // alert(data)
+            }
+        })
+    };
+
+    function tdclick() {
+        // $(this)表示这个td单元格，
+        // .parent("tr")表示这个td的父节点
+        // .prevAll()表示这个tr前面有多少个tr
+        let row = $(this).parent("tr").prevAll().length;
+        let col = $(this).prevAll().length;
+        let id = row
+        let time = col - 3
+        if ($(this).text() === "❌") {
+            $(this).text('✅')
+            send_change(id, time)
+        } else {
+            if (window.confirm("你确定要修改为未完成状态吗？")) {
+                $(this).text('❌')
+                send_change(id, time)
+            }
+        }
+
+    }
+</script>
+</html>
