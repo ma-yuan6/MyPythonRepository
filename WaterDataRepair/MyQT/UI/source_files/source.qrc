@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="login">
+    <file>image/background.jpg</file>
+    <file>image/cancel.png</file>
+    <file>image/hide.png</file>
+    <file>image/qq.png</file>
+    <file>image/set.png</file>
+    <file>image/wx.png</file>
+  </qresource>
+</RCC>
